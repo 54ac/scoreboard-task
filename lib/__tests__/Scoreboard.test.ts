@@ -15,8 +15,8 @@ describe("Scoreboard", () => {
 	});
 
 	it("updates the score", () => {
-		board.startMatch("Poland", "Moldova");
-		board.updateMatch("Poland", "Moldova", 2, 3);
+		const match = board.startMatch("Poland", "Moldova");
+		board.updateMatch(match, 2, 3);
 		const summary = board.getSummary();
 		expect(summary).toEqual(["Poland 2 - 3 Moldova"]);
 	});
