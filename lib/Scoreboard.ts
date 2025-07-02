@@ -16,6 +16,10 @@ export class Scoreboard {
 		if (match) match.update(homeScore, awayScore);
 	}
 
+	finishMatch(id: string) {
+		this.matches = this.matches.filter((m) => m.id !== id);
+	}
+
 	getSummary(): string[] {
 		return this.matches.map((m) => m.toString());
 	}
