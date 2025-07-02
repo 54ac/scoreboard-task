@@ -20,4 +20,11 @@ describe("Scoreboard", () => {
 		const summary = board.getSummary();
 		expect(summary).toEqual(["Poland 2 - 3 Moldova"]);
 	});
+
+	it("finishes the match", () => {
+		const match = board.startMatch("Poland", "Moldova");
+		board.finishMatch(match);
+		const summary = board.getSummary();
+		expect(summary).toEqual([]);
+	});
 });
