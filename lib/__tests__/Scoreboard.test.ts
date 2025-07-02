@@ -27,4 +27,19 @@ describe("Scoreboard", () => {
 		const summary = board.getSummary();
 		expect(summary).toEqual([]);
 	});
+
+	it("sorts the summary accordingly", () => {
+		const match1 = board.startMatch("Poland", "Moldova");
+		board.updateMatch(match1, 2, 3);
+		const match2 = board.startMatch("England", "San Marino");
+		board.updateMatch(match2, 2, 3);
+		const match3 = board.startMatch("Germany", "Brazil");
+		board.updateMatch(match3, 7, 1);
+		const summary = board.getSummary();
+		expect(summary).toEqual([
+			"England 2 - 3 San Marino",
+			"Poland 2 - 3 Moldova",
+			"Germany 7 - 1 Brazil"
+		]);
+	});
 });
