@@ -21,6 +21,20 @@ export class Scoreboard {
 	}
 
 	getSummary(): string[] {
-		return this.matches.map((m) => m.toString());
+		const summary = this.matches
+			.map((match, index) => ({ match, index }))
+			.sort((a, b) => {
+				const scoreDiff =
+					b.match.homeScore +
+					b.match.awayScore -
+					(a.match.homeScore + a.match.awayScore);
+
+				if (scoreDiff !== 0) return scoreDiff;
+
+				return b.index - a.index;
+			})
+			.map(({ match }) => match.toString());
+
+		return summary;
 	}
 }

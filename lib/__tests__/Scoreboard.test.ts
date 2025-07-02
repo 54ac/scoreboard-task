@@ -37,9 +37,9 @@ describe("Scoreboard", () => {
 		board.updateMatch(match3, 7, 1);
 		const summary = board.getSummary();
 		expect(summary).toEqual([
+			"Germany 7 - 1 Brazil",
 			"England 2 - 3 San Marino",
-			"Poland 2 - 3 Moldova",
-			"Germany 7 - 1 Brazil"
+			"Poland 2 - 3 Moldova"
 		]);
 	});
 });
