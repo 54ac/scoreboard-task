@@ -3,8 +3,8 @@ import { Match } from "./Match";
 export class Scoreboard {
 	private matches: Match[] = [];
 
-	startMatch(home: string, away: string) {
-		const match = new Match(home, away);
+	startMatch(homeTeam: string, awayTeam: string) {
+		const match = new Match({ homeTeam, awayTeam });
 		this.matches.push(match);
 	}
 
