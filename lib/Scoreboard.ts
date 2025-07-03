@@ -5,6 +5,11 @@ export class Scoreboard {
 	private matches: Match[] = [];
 	private teams: string[] = [];
 
+	private summaryCache: string[] | null = null;
+	private invalidateCache() {
+		this.summaryCache = null;
+	}
+
 	startMatch(homeTeam: string, awayTeam: string) {
 		if (this.teams.includes(homeTeam) || this.teams.includes(awayTeam))
 			throw new Error("Team already playing");
@@ -15,6 +20,7 @@ export class Scoreboard {
 		const match = new Match({ id, homeTeam, awayTeam });
 		this.matches.push(match);
 		this.teams.push(homeTeam, awayTeam);
+		this.invalidateCache();
 		return id;
 	}
 
@@ -26,6 +32,7 @@ export class Scoreboard {
 			throw new Error("Score cannot be negative");
 
 		match.update(homeScore, awayScore);
+		this.invalidateCache();
 	}
 
 	finishMatch(id: string) {
@@ -36,23 +43,24 @@ export class Scoreboard {
 		this.teams = this.teams.filter(
 			(t) => t !== match.homeTeam && t !== match.awayTeam
 		);
+		this.invalidateCache();
 	}
 
 	getSummary(): string[] {
-		const summary = this.matches
-			.map((match, index) => ({ match, index }))
+		if (this.summaryCache) return this.summaryCache;
+
+		this.summaryCache = this.matches
+			.map((match, index) => ({
+				match,
+				index,
+				totalScore: match.homeScore + match.awayScore
+			}))
 			.sort((a, b) => {
-				const scoreDiff =
-					b.match.homeScore +
-					b.match.awayScore -
-					(a.match.homeScore + a.match.awayScore);
-
-				if (scoreDiff !== 0) return scoreDiff;
-
-				return b.index - a.index;
+				const scoreDiff = b.totalScore - a.totalScore;
+				return scoreDiff !== 0 ? scoreDiff : b.index - a.index;
 			})
 			.map(({ match }) => match.toString());
 
-		return summary;
+		return this.summaryCache;
 	}
 }
