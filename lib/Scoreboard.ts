@@ -9,6 +9,8 @@ export class Scoreboard {
 		if (this.teams.includes(homeTeam) || this.teams.includes(awayTeam))
 			throw new Error("Team already playing");
 
+		if (homeTeam === awayTeam) throw new Error("Team cannot play itself");
+
 		const id = uuidv4();
 		const match = new Match({ id, homeTeam, awayTeam });
 		this.matches.push(match);
@@ -19,6 +21,9 @@ export class Scoreboard {
 	updateMatch(id: string, homeScore: number, awayScore: number) {
 		const match = this.matches.find((m) => m.id === id);
 		if (!match) throw new Error("Match not found");
+
+		if (homeScore < 0 || awayScore < 0)
+			throw new Error("Score cannot be negative");
 
 		match.update(homeScore, awayScore);
 	}
