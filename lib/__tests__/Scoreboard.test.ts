@@ -42,4 +42,14 @@ describe("Scoreboard", () => {
 			"Poland 2 - 3 Moldova"
 		]);
 	});
+
+	it("throws an error if a team is already playing", () => {
+		board.startMatch("Poland", "Moldova");
+		expect(() => board.startMatch("Poland", "Moldova")).toThrow();
+	});
+
+	it("throws errors if a match does not exist", () => {
+		expect(() => board.updateMatch("invalid", 0, 0)).toThrow();
+		expect(() => board.finishMatch("invalid")).toThrow();
+	});
 });
