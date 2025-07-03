@@ -1,6 +1,9 @@
 import { Match } from "./Match";
 import { v4 as uuidv4 } from "uuid";
 
+/**
+ * Manages Match class instances and their state.
+ */
 export class Scoreboard {
 	private matches: Match[] = [];
 	private teams: string[] = [];
@@ -10,6 +13,14 @@ export class Scoreboard {
 		this.summaryCache = null;
 	}
 
+	/**
+	 * Starts a new match between two teams.
+	 * @param homeTeam Name of home team.
+	 * @param awayTeam Name of away team.
+	 * @returns Unique ID of the started match.
+	 * @throws If either team is already playing.
+	 * @throws If the teams are the same.
+	 */
 	startMatch(homeTeam: string, awayTeam: string) {
 		if (this.teams.includes(homeTeam) || this.teams.includes(awayTeam))
 			throw new Error("Team already playing");
@@ -24,6 +35,14 @@ export class Scoreboard {
 		return id;
 	}
 
+	/**
+	 * Updates the score of a match.
+	 * @param id ID of match.
+	 * @param homeScore Score of home team.
+	 * @param awayScore Score of away team.
+	 * @throws If the match does not exist.
+	 * @throws If the score is negative.
+	 */
 	updateMatch(id: string, homeScore: number, awayScore: number) {
 		const match = this.matches.find((m) => m.id === id);
 		if (!match) throw new Error("Match not found");
@@ -35,6 +54,11 @@ export class Scoreboard {
 		this.invalidateCache();
 	}
 
+	/**
+	 * Finishes a match.
+	 * @param id ID of match.
+	 * @throws If the match does not exist.
+	 */
 	finishMatch(id: string) {
 		const match = this.matches.find((m) => m.id === id);
 		if (!match) throw new Error("Match not found");
@@ -46,6 +70,10 @@ export class Scoreboard {
 		this.invalidateCache();
 	}
 
+	/**
+	 * Returns a list of matches ordered by total score, then by most recently started.
+	 * @returns List of matches.
+	 */
 	getSummary(): string[] {
 		if (this.summaryCache) return this.summaryCache;
 
