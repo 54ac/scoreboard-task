@@ -45,11 +45,26 @@ describe("Scoreboard", () => {
 
 	it("throws an error if a team is already playing", () => {
 		board.startMatch("Poland", "Moldova");
-		expect(() => board.startMatch("Poland", "Moldova")).toThrow();
+		expect(() => board.startMatch("Poland", "Brazil")).toThrow();
 	});
 
 	it("throws errors if a match does not exist", () => {
 		expect(() => board.updateMatch("invalid", 0, 0)).toThrow();
 		expect(() => board.finishMatch("invalid")).toThrow();
+	});
+
+	it("throws an error for the same home and away team", () => {
+		expect(() => board.startMatch("Poland", "Poland")).toThrow();
+	});
+
+	it("throws an error when the score is updated with negative values", () => {
+		const id = board.startMatch("Poland", "Moldova");
+		expect(() => board.updateMatch(id, -1, 0)).toThrow();
+	});
+
+	it("allows teams to play again after finishing a match", () => {
+		const id = board.startMatch("Poland", "Moldova");
+		board.finishMatch(id);
+		expect(() => board.startMatch("Poland", "Moldova")).not.toThrow();
 	});
 });
