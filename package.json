@@ -13,7 +13,6 @@
 		}
 	},
 	"scripts": {
-		"start": "tsx ./src/main.ts",
 		"build": "tsc --project tsconfig.lib.json && vite build",
 		"test": "vitest"
 	},
