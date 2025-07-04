@@ -67,4 +67,8 @@ describe("Scoreboard", () => {
 		board.finishMatch(id);
 		expect(() => board.startMatch("Poland", "Moldova")).not.toThrow();
 	});
+
+	it("throws an error when a team name is empty", () => {
+		expect(() => board.startMatch("Poland", "")).toThrow();
+	});
 });
