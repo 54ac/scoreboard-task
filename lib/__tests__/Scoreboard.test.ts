@@ -62,13 +62,13 @@ describe("Scoreboard", () => {
 		expect(() => board.updateMatch(id, -1, 0)).toThrow();
 	});
 
+	it("throws an error when a team name is empty", () => {
+		expect(() => board.startMatch("Poland", "")).toThrow();
+	});
+
 	it("allows teams to play again after finishing a match", () => {
 		const id = board.startMatch("Poland", "Moldova");
 		board.finishMatch(id);
 		expect(() => board.startMatch("Poland", "Moldova")).not.toThrow();
-	});
-
-	it("throws an error when a team name is empty", () => {
-		expect(() => board.startMatch("Poland", "")).toThrow();
 	});
 });

@@ -18,19 +18,27 @@ export class Scoreboard {
 	 * @param homeTeam Name of home team.
 	 * @param awayTeam Name of away team.
 	 * @returns Unique ID of the started match.
+	 * @throws If either team name is empty.
 	 * @throws If either team is already playing.
 	 * @throws If the teams are the same.
 	 */
 	startMatch(homeTeam: string, awayTeam: string) {
-		if (this.teams.includes(homeTeam) || this.teams.includes(awayTeam))
-			throw new Error("Team already playing");
+		const home = homeTeam.trim();
+		const away = awayTeam.trim();
 
-		if (homeTeam === awayTeam) throw new Error("Team cannot play itself");
+		if (!home || !away) throw new Error("Team name cannot be empty");
+		if (this.teams.includes(home) || this.teams.includes(away))
+			throw new Error("Team already playing");
+		if (home === away) throw new Error("Team cannot play itself");
 
 		const id = uuidv4();
-		const match = new Match({ id, homeTeam, awayTeam });
+		const match = new Match({
+			id,
+			homeTeam: home,
+			awayTeam: away
+		});
 		this.matches.push(match);
-		this.teams.push(homeTeam, awayTeam);
+		this.teams.push(home, away);
 		this.invalidateCache();
 		return id;
 	}
@@ -45,8 +53,8 @@ export class Scoreboard {
 	 */
 	updateMatch(id: string, homeScore: number, awayScore: number) {
 		const match = this.matches.find((m) => m.id === id);
-		if (!match) throw new Error("Match not found");
 
+		if (!match) throw new Error("Match not found");
 		if (homeScore < 0 || awayScore < 0)
 			throw new Error("Score cannot be negative");
 
